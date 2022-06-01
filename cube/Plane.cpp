@@ -2,25 +2,25 @@
 
 
 Plane::Plane() {
-    int counter = 0;
+    std::string counter = "w";
     for (auto &cell: cells_) {
-        for (int &c: cell) {
+        for (auto &c: cell) {
             c = counter;
-            ++counter;
+//            ++counter;
         }
     }
 }
 
-Plane::Plane(int color) {
+Plane::Plane(std::string color) {
     for (auto &cell: cells_)
-        for (int &c: cell)
+        for (auto &c: cell)
             c = color;
 //    for (int i = 0; i < ; ++i) {
 //
 //    }
 }
 
-int *Plane::operator[](int index) {
+std::string *Plane::operator[](int index) {
     return cells_[index];
 }
 

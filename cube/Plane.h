@@ -7,15 +7,15 @@
 
 class Plane {
 private:
-    int cells_[3][3];
+    std::string cells_[3][3];
 public:
-    Plane(int color);
+    Plane(std::string color);
 
     Plane();
 
     friend std::ostream& operator<<(std::ostream& os, const Plane& plane);
 
-    int *operator[](int index);
+    std::string *operator[](int index);
 };
 
 

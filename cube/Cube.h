@@ -17,12 +17,16 @@ private:
 public:
     Cube();
 
-    Cube(const Plane &front, const Plane &back, const Plane &left, const Plane &right, const Plane &upper,
-         const Plane &lower);
+    Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
+         Plane lower);
 
     bool validity_check();
 
-    Cube read_file(std::string path);
+    Cube read_file(const char *path);
+
+    void to_txt(const std::string& name);
+
+    void assign_cells(Plane &plane, std::ifstream &is);
 
     Cube generate_random(int random_state = 0);
 

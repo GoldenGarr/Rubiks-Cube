@@ -1,20 +1,52 @@
 #include "Cube.h"
+#include <iostream>
+#include <fstream>
 #include <algorithm>
+#include <utility>
 
-Cube::Cube(const Plane &front, const Plane &back, const Plane &left, const Plane &right, const Plane &upper,
-           const Plane &lower) : front_(front), back_(back), left_(left) \
-, right_(right), upper_(upper), down_(lower) {}
+Cube::Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
+           Plane lower) : front_(std::move(front)), back_(std::move(back)), left_(std::move(left)) \
+, right_(std::move(right)), upper_(std::move(upper)), down_(std::move(lower)) {}
 
 Cube::Cube() {
-    front_ = Plane();
-    back_ = Plane();
-    left_ = Plane();
-    right_ = Plane();
-    upper_ = Plane();
-    down_ = Plane();
+    front_ = Plane("r");
+    back_ = Plane("o");
+    left_ = Plane("g");
+    right_ = Plane("b");
+    upper_ = Plane("w");
+    down_ = Plane("y");
+}
 
-//    upper_[0][2] = 100;
-//    upper_[2][1] = 69;
+// Required sequence: Front -> Back -> Left -> Right -> Upper -> Down
+Cube Cube::read_file(const char *path) {
+    Cube cube;
+    std::ifstream file(path);
+    if (file.is_open()) {
+        assign_cells(cube.front_, file);
+        assign_cells(cube.back_, file);
+        assign_cells(cube.left_, file);
+        assign_cells(cube.right_, file);
+        assign_cells(cube.upper_, file);
+        assign_cells(cube.down_, file);
+    }
+    return cube;
+}
+
+void Cube::to_txt(const std::string &name) {
+    std::ofstream file(name + ".txt");
+    if (file.is_open()) {
+        file << front_ << back_ << left_ << right_
+             << upper_ << down_;
+        file.close();
+    }
+}
+
+void Cube::assign_cells(Plane &plane, std::ifstream &is) {
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            is >> plane[i][j];
+        }
+    }
 }
 
 // 12 basic cube rotations
