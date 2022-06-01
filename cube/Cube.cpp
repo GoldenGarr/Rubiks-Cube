@@ -1,7 +1,7 @@
 #include "Cube.h"
 #include <iostream>
 #include <fstream>
-#include <algorithm>
+#include <stdlib.h>
 #include <utility>
 
 Cube::Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
@@ -32,6 +32,7 @@ Cube Cube::read_file(const char *path) {
     return cube;
 }
 
+// Output sequence: Front -> Back -> Left -> Right -> Upper -> Down
 void Cube::to_txt(const std::string &name) {
     std::ofstream file(name + ".txt");
     if (file.is_open()) {
@@ -49,9 +50,20 @@ void Cube::assign_cells(Plane &plane, std::ifstream &is) {
     }
 }
 
+Cube Cube::generate_random(int n_complexity) {
+    std::string rotations[12] = {"U", "Ui", "D", "Di", "R", "Ri",
+                                 "L", "Li", "F", "Fi", "B", "Bi"};
+    Cube cube = Cube();
+    for (int i = 0; i < n_complexity; ++i)
+        cube.rotate(rotations[rand() % 12]);
+
+    return cube;
+}
+
+
 // 12 basic cube rotations
 void Cube::rotate(const std::string &rot) {
-    std::cout << "Rotate " + rot << "\n";
+//    std::cout << "Rotate " + rot << "\n";
     if (rot == "U") {
         /* Upper row
          *    b            l

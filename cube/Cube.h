@@ -28,7 +28,7 @@ public:
 
     void assign_cells(Plane &plane, std::ifstream &is);
 
-    Cube generate_random(int random_state = 0);
+    Cube generate_random(int n_complexity=20);
 
     void rotate(const std::string &rot);
 
