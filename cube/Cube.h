@@ -13,7 +13,7 @@ private:
     Plane left_;
     Plane right_;
     Plane upper_;
-    Plane lower_;
+    Plane down_;
 public:
     Cube();
 
@@ -28,13 +28,17 @@ public:
 
     void rotate(const std::string &rot);
 
-    void swap_rows(Plane& a, Plane& b, int row_number_a, int row_number_b);
+    void swap_rows(Plane &a, Plane &b, int row_number_a, int row_number_b);
+
+    void swap_columns(Plane &a, Plane &b, int column_number_a, int column_number_b);
+
+    void swap_row_column(Plane& row_plane, Plane& column_plane, int row_number, int column_number);
 
     void rotate_clockwise(Plane &plane);
 
     void rotate_counterclockwise(Plane &plane);
 
-    void gen_algo_solve(int population_size=4000);
+    void gen_algo_solve(int population_size = 4000);
 
     void print();
 

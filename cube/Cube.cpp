@@ -3,7 +3,7 @@
 
 Cube::Cube(const Plane &front, const Plane &back, const Plane &left, const Plane &right, const Plane &upper,
            const Plane &lower) : front_(front), back_(back), left_(left) \
-, right_(right), upper_(upper), lower_(lower) {}
+, right_(right), upper_(upper), down_(lower) {}
 
 Cube::Cube() {
     front_ = Plane(0);
@@ -11,7 +11,7 @@ Cube::Cube() {
     left_ = Plane(2);
     right_ = Plane(3);
     upper_ = Plane(4);
-    lower_ = Plane(5);
+    down_ = Plane(5);
 
 //    upper_[0][2] = 100;
 //    upper_[2][1] = 69;
@@ -22,8 +22,9 @@ void Cube::rotate(const std::string &rot) {
     if (rot == "U") {
         /* Upper row
          *    b            l
-         * l  o  r  ->  f  o  r
-         *    f            b
+         * l  o  r  ->  f  o  b
+         *    f            r
+         * + Rotate the upper plane clockwise
          * */
         swap_rows(front_, left_, 0, 0);
         swap_rows(front_, back_, 0, 0);
@@ -36,6 +37,7 @@ void Cube::rotate(const std::string &rot) {
          *    b            r
          * l  o  r  ->  b  o  f
          *    f            l
+         * + Rotate the upper plane counterclockwise
          * */
         swap_rows(front_, right_, 0, 0);
         swap_rows(front_, back_, 0, 0);
@@ -44,25 +46,83 @@ void Cube::rotate(const std::string &rot) {
     }
 
     if (rot == "D") {
-//        rotate_clockwise(upper_);
+        /* Lower row
+         *    b            r
+         * l  o  r  ->  b  o  f
+         *    f            l
+         * + Rotate the upper plane clockwise
+         * */
         swap_rows(front_, right_, 2, 2);
         swap_rows(front_, back_, 2, 2);
         swap_rows(front_, left_, 2, 2);
-        rotate_clockwise(lower_);
+        rotate_clockwise(down_);
     }
 
     if (rot == "Di") {
+        /* Lower row
+         *    b            l
+         * l  o  r  ->  f  o  b
+         *    f            r
+         * + Rotate the lower plane counterclockwise
+         * */
         swap_rows(front_, left_, 2, 2);
         swap_rows(front_, back_, 2, 2);
         swap_rows(front_, right_, 2, 2);
+        rotate_counterclockwise(down_);
+    }
 
-        rotate_counterclockwise(lower_);
+    if (rot == "R") {
+        swap_columns(front_, upper_, 2, 2);
+        swap_columns(front_, back_, 2, 2);
+        swap_columns(front_, down_, 2, 2);
+        rotate_clockwise(right_);
+    }
+
+    if (rot == "Ri") {
+        swap_columns(front_, down_, 2, 2);
+        swap_columns(front_, back_, 2, 2);
+        swap_columns(front_, upper_, 2, 2);
+        rotate_counterclockwise(right_);
+    }
+
+    if (rot == "L") {
+        swap_columns(front_, down_, 0, 0);
+        swap_columns(front_, back_, 0, 0);
+        swap_columns(front_, upper_, 0, 0);
+        rotate_clockwise(left_);
+    }
+
+    if (rot == "Li") {
+        swap_columns(front_, upper_, 0, 0);
+        swap_columns(front_, back_, 0, 0);
+        swap_columns(front_, down_, 0, 0);
+        rotate_counterclockwise(left_);
+    }
+
+    if (rot == "F") {
+        swap_row_column(upper_, right_, 2, 0);
+        swap_row_column(upper_, left_, 2, 2);
+        swap_row_column(down_, left_, 0, 2);
+
+        rotate_clockwise(front_);
     }
 }
 
 void Cube::swap_rows(Plane &a, Plane &b, int row_number_a, int row_number_b) {
     for (int i = 0; i < 3; ++i) {
         std::swap(a[row_number_a][i], b[row_number_b][i]);
+    }
+}
+
+void Cube::swap_columns(Plane &a, Plane &b, int column_number_a, int column_number_b) {
+    for (int i = 0; i < 3; ++i) {
+        std::swap(a[i][column_number_a], b[i][column_number_b]);
+    }
+}
+
+void Cube::swap_row_column(Plane& row_plane, Plane& column_plane, int row_number, int column_number) {
+    for (int i = 0; i < 3; ++i) {
+        std::swap(row_plane[row_number][i], column_plane[i][column_number]);
     }
 }
 
@@ -83,23 +143,23 @@ void Cube::rotate_counterclockwise(Plane &plane) {
 }
 
 void Cube::print() {
-    std::cout << "Front: \n";
+    std::cout << "Front 0 : \n";
     std::cout << front_;
 
-    std::cout << "Back: \n";
+    std::cout << "Back 1 : \n";
     std::cout << back_;
 
-    std::cout << "Left: \n";
+    std::cout << "Left 2 : \n";
     std::cout << left_;
 
-    std::cout << "Right: \n";
+    std::cout << "Right 3 : \n";
     std::cout << right_;
 
-    std::cout << "Upper: \n";
+    std::cout << "Upper 4 : \n";
     std::cout << upper_;
 
-    std::cout << "Lower: \n";
-    std::cout << lower_;
+    std::cout << "Lower 5 : \n";
+    std::cout << down_;
 }
 
 void Cube::gen_algo_solve(int population_size) {
@@ -147,11 +207,11 @@ void Cube::setUpper(const Plane &upper) {
 }
 
 const Plane &Cube::getLower() const {
-    return lower_;
+    return down_;
 }
 
 void Cube::setLower(const Plane &lower) {
-    lower_ = lower;
+    down_ = lower;
 }
 
 
