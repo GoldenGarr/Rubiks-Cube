@@ -4,6 +4,9 @@ Plane::Plane(int color) {
     for (auto &cell: cells_)
         for (int &c: cell)
             c = color;
+//    for (int i = 0; i < ; ++i) {
+//
+//    }
 }
 
 int *Plane::operator[](int index) {
@@ -11,10 +14,11 @@ int *Plane::operator[](int index) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Plane &plane) {
-    for (int i = 1; i <= 9; ++i) {
-        os << *plane.cells_[i] << " ";
-        if (i % 3 == 0)
-            os << "\n";
+    for (auto cell : plane.cells_) {
+        for (int j = 0; j < 3; ++j)
+            os << cell[j] << " ";
+
+        os << "\n";
     }
     return os;
 }
