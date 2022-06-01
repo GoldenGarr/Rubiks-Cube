@@ -9,7 +9,9 @@ class Plane {
 private:
     int cells_[3][3];
 public:
-    Plane(int color=-1);
+    Plane(int color);
+
+    Plane();
 
     friend std::ostream& operator<<(std::ostream& os, const Plane& plane);
 

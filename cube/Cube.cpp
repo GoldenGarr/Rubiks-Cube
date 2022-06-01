@@ -6,17 +6,18 @@ Cube::Cube(const Plane &front, const Plane &back, const Plane &left, const Plane
 , right_(right), upper_(upper), down_(lower) {}
 
 Cube::Cube() {
-    front_ = Plane(0);
-    back_ = Plane(1);
-    left_ = Plane(2);
-    right_ = Plane(3);
-    upper_ = Plane(4);
-    down_ = Plane(5);
+    front_ = Plane();
+    back_ = Plane();
+    left_ = Plane();
+    right_ = Plane();
+    upper_ = Plane();
+    down_ = Plane();
 
 //    upper_[0][2] = 100;
 //    upper_[2][1] = 69;
 }
 
+// 12 basic cube rotations
 void Cube::rotate(const std::string &rot) {
     std::cout << "Rotate " + rot << "\n";
     if (rot == "U") {
@@ -73,29 +74,37 @@ void Cube::rotate(const std::string &rot) {
 
     if (rot == "R") {
         swap_columns(front_, upper_, 2, 2);
-        swap_columns(front_, back_, 2, 2);
+        swap_columns(front_, back_, 2, 0);
         swap_columns(front_, down_, 2, 2);
+        std::swap(back_[0][0], back_[2][0]);
+        std::swap(down_[0][2], down_[2][2]);
         rotate_clockwise(right_);
     }
 
     if (rot == "Ri") {
         swap_columns(front_, down_, 2, 2);
-        swap_columns(front_, back_, 2, 2);
+        swap_columns(front_, back_, 2, 0);
         swap_columns(front_, upper_, 2, 2);
+        std::swap(back_[0][0], back_[2][0]);
+        std::swap(upper_[0][2], upper_[2][2]);
         rotate_counterclockwise(right_);
     }
 
     if (rot == "L") {
         swap_columns(front_, down_, 0, 0);
-        swap_columns(front_, back_, 0, 0);
+        swap_columns(front_, back_, 0, 2);
         swap_columns(front_, upper_, 0, 0);
+        std::swap(back_[0][2], back_[2][2]);
+        std::swap(upper_[0][0], upper_[2][0]);
         rotate_clockwise(left_);
     }
 
     if (rot == "Li") {
         swap_columns(front_, upper_, 0, 0);
-        swap_columns(front_, back_, 0, 0);
+        swap_columns(front_, back_, 0, 2);
         swap_columns(front_, down_, 0, 0);
+        std::swap(back_[0][2], back_[2][2]);
+        std::swap(down_[0][0], down_[2][0]);
         rotate_counterclockwise(left_);
     }
 
@@ -103,29 +112,61 @@ void Cube::rotate(const std::string &rot) {
         swap_row_column(upper_, right_, 2, 0);
         swap_row_column(upper_, left_, 2, 2);
         swap_row_column(down_, left_, 0, 2);
-
+        std::swap(upper_[2][0], upper_[2][2]);
+        std::swap(down_[0][0], down_[0][2]);
         rotate_clockwise(front_);
+    }
+
+    if (rot == "Fi") {
+        swap_row_column(down_, left_, 0, 2);
+        swap_row_column(upper_, left_, 2, 2);
+        swap_row_column(upper_, right_, 2, 0);
+        std::swap(left_[0][2], left_[2][2]);
+        std::swap(right_[0][0], right_[2][0]);
+        rotate_counterclockwise(front_);
+    }
+
+    if (rot == "B") {
+        swap_row_column(down_, left_, 2, 0);
+        swap_row_column(upper_, left_, 0, 0);
+        swap_row_column(upper_, right_, 0, 2);
+        std::swap(left_[0][0], left_[2][0]);
+        std::swap(right_[0][2], right_[2][2]);
+        rotate_clockwise(back_);
+    }
+
+    if (rot == "Bi") {
+        swap_row_column(upper_, right_, 0, 2);
+        swap_row_column(upper_, left_, 0, 0);
+        swap_row_column(down_, left_, 2, 0);
+        std::swap(upper_[0][0], upper_[0][2]);
+        std::swap(down_[2][0], down_[2][2]);
+        rotate_counterclockwise(back_);
     }
 }
 
+// Swap chosen planes' rows
 void Cube::swap_rows(Plane &a, Plane &b, int row_number_a, int row_number_b) {
     for (int i = 0; i < 3; ++i) {
         std::swap(a[row_number_a][i], b[row_number_b][i]);
     }
 }
 
+// Swap chosen planes' columns
 void Cube::swap_columns(Plane &a, Plane &b, int column_number_a, int column_number_b) {
     for (int i = 0; i < 3; ++i) {
         std::swap(a[i][column_number_a], b[i][column_number_b]);
     }
 }
 
-void Cube::swap_row_column(Plane& row_plane, Plane& column_plane, int row_number, int column_number) {
+// Swap one plane's row with other's column
+void Cube::swap_row_column(Plane &row_plane, Plane &column_plane, int row_number, int column_number) {
     for (int i = 0; i < 3; ++i) {
         std::swap(row_plane[row_number][i], column_plane[i][column_number]);
     }
 }
 
+// Rotate plane by 90 degrees clockwise
 void Cube::rotate_clockwise(Plane &plane) {
     swap_rows(plane, plane, 0, 2);
 
@@ -136,12 +177,14 @@ void Cube::rotate_clockwise(Plane &plane) {
     }
 }
 
+// Rotate plane by 90 degrees counterclockwise
 void Cube::rotate_counterclockwise(Plane &plane) {
     for (int i = 0; i < 3; ++i) {
         rotate_clockwise(plane);
     }
 }
 
+// Cube output
 void Cube::print() {
     std::cout << "Front 0 : \n";
     std::cout << front_;
@@ -158,14 +201,16 @@ void Cube::print() {
     std::cout << "Upper 4 : \n";
     std::cout << upper_;
 
-    std::cout << "Lower 5 : \n";
+    std::cout << "Down 5 : \n";
     std::cout << down_;
 }
 
+// I HATE N
 void Cube::gen_algo_solve(int population_size) {
 
 }
 
+//Getters and setters
 const Plane &Cube::getFront() const {
     return front_;
 }
@@ -213,5 +258,3 @@ const Plane &Cube::getLower() const {
 void Cube::setLower(const Plane &lower) {
     down_ = lower;
 }
-
-

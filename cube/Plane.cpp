@@ -1,5 +1,16 @@
 #include "Plane.h"
 
+
+Plane::Plane() {
+    int counter = 0;
+    for (auto &cell: cells_) {
+        for (int &c: cell) {
+            c = counter;
+            ++counter;
+        }
+    }
+}
+
 Plane::Plane(int color) {
     for (auto &cell: cells_)
         for (int &c: cell)
@@ -14,7 +25,7 @@ int *Plane::operator[](int index) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Plane &plane) {
-    for (auto cell : plane.cells_) {
+    for (auto cell: plane.cells_) {
         for (int j = 0; j < 3; ++j)
             os << cell[j] << " ";
 
@@ -22,5 +33,7 @@ std::ostream &operator<<(std::ostream &os, const Plane &plane) {
     }
     return os;
 }
+
+
 
 
