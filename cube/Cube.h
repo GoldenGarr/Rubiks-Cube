@@ -28,7 +28,11 @@ public:
 
     void rotate(const std::string &rot);
 
-    void swap_rows(Plane& a, Plane& b, int row_number);
+    void swap_rows(Plane& a, Plane& b, int row_number_a, int row_number_b);
+
+    void rotate_clockwise(Plane &plane);
+
+    void rotate_counterclockwise(Plane &plane);
 
     void gen_algo_solve(int population_size=4000);
 
