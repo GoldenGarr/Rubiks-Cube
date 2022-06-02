@@ -7,7 +7,8 @@
 #include <string>
 
 class Cube {
-private:
+public:
+    // Made these fields public to gain easier access from Solver class
     Plane front_;
     Plane back_;
     Plane left_;
@@ -38,9 +39,13 @@ public:
 
     void swap_row_column(Plane& row_plane, Plane& column_plane, int row_number, int column_number);
 
+    void swap_planes(Plane &a, Plane &b);
+
     void rotate_clockwise(Plane &plane);
 
     void rotate_counterclockwise(Plane &plane);
+
+    void rotate_cube(const std::string &rot);
 
     void gen_algo_solve(int population_size = 4000);
 

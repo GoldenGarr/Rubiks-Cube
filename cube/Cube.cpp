@@ -60,7 +60,6 @@ Cube Cube::generate_random(int n_complexity) {
     return cube;
 }
 
-
 // 12 basic cube rotations
 void Cube::rotate(const std::string &rot) {
 //    std::cout << "Rotate " + rot << "\n";
@@ -210,6 +209,15 @@ void Cube::swap_row_column(Plane &row_plane, Plane &column_plane, int row_number
     }
 }
 
+void Cube::swap_planes(Plane &a, Plane &b) {
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            std::swap(a[i][j], b[i][j]);
+        }
+    }
+}
+
+
 // Rotate plane by 90 degrees clockwise
 void Cube::rotate_clockwise(Plane &plane) {
     swap_rows(plane, plane, 0, 2);
@@ -227,6 +235,52 @@ void Cube::rotate_counterclockwise(Plane &plane) {
         rotate_clockwise(plane);
     }
 }
+
+void Cube::rotate_cube(const std::string &rot) {
+    if (rot == "Y") {
+        // Rotate the entire cube by Y axis: LEFT plane -> FRONT plane
+        swap_planes(front_, right_);
+        swap_planes(front_, back_);
+        swap_planes(front_, left_);
+    }
+    if (rot == "Yi") {
+        // Rotate the entire cube by Y axis: RIGHT plane -> FRONT plane
+        swap_planes(front_, left_);
+        swap_planes(front_, back_);
+        swap_planes(front_, right_);
+    }
+    if (rot == "X") {
+        // Rotate the entire cube by X axis: UP plane -> FRONT plane
+        swap_planes(front_, down_);
+        swap_planes(front_, back_);
+        swap_planes(front_, upper_);
+
+        rotate_clockwise(upper_);
+        rotate_clockwise(upper_);
+
+        rotate_clockwise(back_);
+        rotate_clockwise(back_);
+
+        rotate_counterclockwise(right_);
+        rotate_clockwise(left_);
+    }
+    if (rot == "Xi") {
+        // Rotate the entire cube by X axis: DOWN plane -> FRONT plane
+        swap_planes(front_, upper_);
+        swap_planes(front_, back_);
+        swap_planes(front_, down_);
+
+        rotate_clockwise(down_);
+        rotate_clockwise(down_);
+
+        rotate_clockwise(back_);
+        rotate_clockwise(back_);
+
+        rotate_clockwise(right_);
+        rotate_counterclockwise(left_);
+    }
+}
+
 
 // Cube output
 void Cube::print() {
