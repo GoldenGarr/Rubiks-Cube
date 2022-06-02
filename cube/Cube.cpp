@@ -279,6 +279,36 @@ void Cube::rotate_cube(const std::string &rot) {
         rotate_clockwise(right_);
         rotate_counterclockwise(left_);
     }
+    if (rot == "Z") {
+        // Rotate the entire cube by Z axis: LEFT plane -> UP plane
+
+        swap_planes(upper_, right_);
+        swap_planes(upper_, down_);
+        swap_planes(upper_, left_);
+
+        rotate_clockwise(upper_);
+        rotate_clockwise(right_);
+        rotate_clockwise(left_);
+        rotate_clockwise(down_);
+
+        rotate_clockwise(front_);
+        rotate_counterclockwise(back_);
+    }
+    if (rot == "Zi") {
+        // Rotate the entire cube by Zi axis: RIGHT plane -> UP plane
+
+        swap_planes(upper_, left_);
+        swap_planes(upper_, down_);
+        swap_planes(upper_, right_);
+
+        rotate_counterclockwise(upper_);
+        rotate_counterclockwise(right_);
+        rotate_counterclockwise(left_);
+        rotate_counterclockwise(down_);
+
+        rotate_counterclockwise(front_);
+        rotate_clockwise(back_);
+    }
 }
 
 
