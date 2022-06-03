@@ -1,13 +1,18 @@
-//
-// Created by Максим on 01.06.2022.
-//
-
 #ifndef RUBIKSCUBE_SOLVER_H
 #define RUBIKSCUBE_SOLVER_H
 
 
-class Solver {
+#include "../cube/Cube.h"
 
+class Solver: public Cube {
+public:
+    Cube cube;
+public:
+    Solver(Cube &cube);
+
+    void first_layer(Cube &cube);
+
+    void pif_paf();
 };
 
 
