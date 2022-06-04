@@ -6,11 +6,13 @@
 
 class Solver: public Cube {
 public:
-    Cube cube;
+//    Cube cube;
 public:
-    Solver(Cube &cube);
+    Solver();
 
     void first_layer(Cube &cube);
+
+    void move_cell_to_cross(Cube &cube, const std::string& plane, const std::string& color);
 
     void pif_paf();
 };
