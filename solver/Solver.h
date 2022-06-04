@@ -4,15 +4,23 @@
 
 #include "../cube/Cube.h"
 
-class Solver: public Cube {
-public:
-//    Cube cube;
+class Solver : public Cube {
+private:
+    int cross_cells[4][2] = {{2, 1},
+                             {1, 2},
+                             {0, 1},
+                             {1, 0}};
+    //    Cube cube;
 public:
     Solver();
 
     void first_layer(Cube &cube);
 
-    void move_cell_to_cross(Cube &cube, const std::string& plane, const std::string& color);
+    void plane_setup(Cube &cube, const std::string &plane, const std::string &color, const int &cross_index, const int &vacant_index);
+
+    int search_vacant_place(Cube &cube, const std::string &color);
+
+    void move_cell_to_cross(Cube &cube, const std::string &plane, const std::string &color);
 
     void pif_paf();
 };

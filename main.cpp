@@ -9,9 +9,14 @@ int main() {
 //    cube.print();
 
     Solver solver;
-    solver.first_layer(cube);
+//    solver.first_layer(cube);
+    cube.rotate_cube("Z");
     cube.print();
+    std::cout << "----------------\n";
 
+    solver.first_layer(cube);
+
+    cube.print();
 
 //    std::string rot;
 //    while (rot != "E") {
