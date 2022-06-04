@@ -1,7 +1,7 @@
 #include "Solver.h"
 
 
-Solver::Solver() {}
+Solver::Solver() = default;
 
 // Layer one solver
 void Solver::first_layer(Cube &cube) {
@@ -14,13 +14,13 @@ void Solver::first_layer(Cube &cube) {
      *   W
      *   */
     if (cube.front_[1][1] == "y")
-        cube.rotate_cube("X");
+        cube.rotate_cube("Xi");
     else if (cube.right_[1][1] == "y")
         cube.rotate_cube("Zi");
     else if (cube.left_[1][1] == "y")
         cube.rotate_cube("Z");
     else if (cube.back_[1][1] == "y")
-        cube.rotate_cube("Xi");
+        cube.rotate_cube("X");
     else if (cube.down_[1][1] == "y") {
         cube.rotate_cube("X");
         cube.rotate_cube("X");
@@ -56,10 +56,60 @@ void Solver::first_layer(Cube &cube) {
                 plane_setup(cube, "front", "w", i, vacant_index);
                 vacant_index = search_vacant_place(cube, "w");
             }
-        }
-//        vacant_index = search_vacant_place(cube, "w");
-    }
 
+            if (cube.down_[cross_cells[i][0]][cross_cells[i][1]] == "w") {
+                if (vacant_index != -1 && i != 2) {
+                    /* Transform the down plane to:
+                     *  - w -
+                     *  - - -
+                     *  - - -
+                     */
+                    if (i == 0) {
+                        cube.rotate("Di");
+                        cube.rotate("Di");
+                    } else if (i == 1) {
+                        cube.rotate("Di");
+                    } else {
+                        cube.rotate("D");
+                    }
+                }
+
+                for (int j = 0; j < vacant_index; ++j) {
+                    cube.rotate("U");
+                }
+
+                cube.rotate("F");
+                cube.rotate("F");
+                vacant_index = search_vacant_place(cube, "w");
+            }
+        }
+    }
+    // 'Daisy' on UP completed
+
+    // Move the white cross to the DOWN (with edge color respectively)
+    while (cube.front_[0][1] != cube.front_[1][1]) {
+        cube.rotate("U");
+    }
+    cube.rotate("F");
+    cube.rotate("F");
+//
+    while (cube.left_[0][1] != cube.left_[1][1]) {
+        cube.rotate("U");
+    }
+    cube.rotate("L");
+    cube.rotate("L");
+//
+    while (cube.right_[0][1] != cube.right_[1][1]) {
+        cube.rotate("U");
+    }
+    cube.rotate("R");
+    cube.rotate("R");
+//
+    while (cube.back_[0][1] != cube.back_[1][1]) {
+        cube.rotate("U");
+    }
+    cube.rotate("B");
+    cube.rotate("B");
 }
 
 
@@ -67,17 +117,17 @@ void Solver::plane_setup(Cube &cube, const std::string &plane, const std::string
                          const int &vacant_index) {
     // Setup to work with a LEFT plane
     if (plane == "right") {
-        cube.rotate_cube("Y");
-        cube.rotate_cube("Y");
-    }
-    if (plane == "front") {
-        cube.rotate_cube("Y");
-    }
-    if (plane == "back") {
+        cube.rotate_cube("Yi");
         cube.rotate_cube("Yi");
     }
+    if (plane == "front") {
+        cube.rotate_cube("Yi");
+    }
+    if (plane == "back") {
+        cube.rotate_cube("Y");
+    }
 
-    if (cross_index != 1 && vacant_index != -1) {
+    if (vacant_index != -1) {
         for (int j = 0; j <= vacant_index; ++j) {
             cube.rotate("U");
         }
@@ -93,8 +143,8 @@ void Solver::plane_setup(Cube &cube, const std::string &plane, const std::string
     } else if (cross_index == 2) {
         cube.rotate("L");
     } else if (cross_index == 3) {
-        cube.rotate_cube("L");
-        cube.rotate_cube("L");
+        cube.rotate("L");
+        cube.rotate("L");
     }
     move_cell_to_cross(cube, "left", "w");
 }
@@ -116,12 +166,11 @@ int Solver::search_vacant_place(Cube &cube, const std::string &color) {
  *  - - -
  *  */
 void Solver::move_cell_to_cross(Cube &cube, const std::string &plane, const std::string &color) {
-    int vacant_index = search_vacant_place(cube, "w");
-    if (vacant_index != -1) {
-        for (int j = 0; j < vacant_index; ++j)
-            cube.rotate("U");
-        cube.rotate("F");
-    }
+    int vacant_index = search_vacant_place(cube, color);
+    for (int j = 0; j < vacant_index; ++j)
+        cube.rotate("U");
+    cube.rotate("F");
+
 //    if (plane == "left") {
 //        for (int i = 0; i < 4; ++i) {
 //            if (cube.upper_[cross_cells[i][0]][cross_cells[i][1]] != color) {

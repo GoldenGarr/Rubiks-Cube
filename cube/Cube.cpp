@@ -74,6 +74,7 @@ void Cube::rotate(const std::string &rot) {
         swap_rows(front_, back_, 0, 0);
         swap_rows(front_, right_, 0, 0);
         rotate_clockwise(upper_);
+        commands_sequence.emplace_back("U");
     }
 
     if (rot == "Ui") {
@@ -87,6 +88,7 @@ void Cube::rotate(const std::string &rot) {
         swap_rows(front_, back_, 0, 0);
         swap_rows(front_, left_, 0, 0);
         rotate_counterclockwise(upper_);
+        commands_sequence.emplace_back("Ui");
     }
 
     if (rot == "D") {
@@ -100,6 +102,7 @@ void Cube::rotate(const std::string &rot) {
         swap_rows(front_, back_, 2, 2);
         swap_rows(front_, left_, 2, 2);
         rotate_clockwise(down_);
+        commands_sequence.emplace_back("D");
     }
 
     if (rot == "Di") {
@@ -113,6 +116,7 @@ void Cube::rotate(const std::string &rot) {
         swap_rows(front_, back_, 2, 2);
         swap_rows(front_, right_, 2, 2);
         rotate_counterclockwise(down_);
+        commands_sequence.emplace_back("Di");
     }
 
     if (rot == "R") {
@@ -122,6 +126,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(back_[0][0], back_[2][0]);
         std::swap(down_[0][2], down_[2][2]);
         rotate_clockwise(right_);
+        commands_sequence.emplace_back("R");
     }
 
     if (rot == "Ri") {
@@ -131,6 +136,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(back_[0][0], back_[2][0]);
         std::swap(upper_[0][2], upper_[2][2]);
         rotate_counterclockwise(right_);
+        commands_sequence.emplace_back("Ri");
     }
 
     if (rot == "L") {
@@ -140,6 +146,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(back_[0][2], back_[2][2]);
         std::swap(upper_[0][0], upper_[2][0]);
         rotate_clockwise(left_);
+        commands_sequence.emplace_back("L");
     }
 
     if (rot == "Li") {
@@ -149,6 +156,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(back_[0][2], back_[2][2]);
         std::swap(down_[0][0], down_[2][0]);
         rotate_counterclockwise(left_);
+        commands_sequence.emplace_back("Li");
     }
 
     if (rot == "F") {
@@ -158,6 +166,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(upper_[2][0], upper_[2][2]);
         std::swap(down_[0][0], down_[0][2]);
         rotate_clockwise(front_);
+        commands_sequence.emplace_back("F");
     }
 
     if (rot == "Fi") {
@@ -167,6 +176,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(left_[0][2], left_[2][2]);
         std::swap(right_[0][0], right_[2][0]);
         rotate_counterclockwise(front_);
+        commands_sequence.emplace_back("Fi");
     }
 
     if (rot == "B") {
@@ -176,6 +186,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(left_[0][0], left_[2][0]);
         std::swap(right_[0][2], right_[2][2]);
         rotate_clockwise(back_);
+        commands_sequence.emplace_back("B");
     }
 
     if (rot == "Bi") {
@@ -185,6 +196,7 @@ void Cube::rotate(const std::string &rot) {
         std::swap(upper_[0][0], upper_[0][2]);
         std::swap(down_[2][0], down_[2][2]);
         rotate_counterclockwise(back_);
+        commands_sequence.emplace_back("Bi");
     }
 }
 
@@ -242,12 +254,21 @@ void Cube::rotate_cube(const std::string &rot) {
         swap_planes(front_, right_);
         swap_planes(front_, back_);
         swap_planes(front_, left_);
+
+        rotate_counterclockwise(upper_);
+        rotate_clockwise(down_);
+
+        commands_sequence.emplace_back("_Y_");
     }
     if (rot == "Yi") {
         // Rotate the entire cube by Y axis: RIGHT plane -> FRONT plane
         swap_planes(front_, left_);
         swap_planes(front_, back_);
         swap_planes(front_, right_);
+
+        rotate_clockwise(upper_);
+        rotate_counterclockwise(down_);
+        commands_sequence.emplace_back("_Yi_");
     }
     if (rot == "X") {
         // Rotate the entire cube by X axis: UP plane -> FRONT plane
@@ -263,6 +284,8 @@ void Cube::rotate_cube(const std::string &rot) {
 
         rotate_counterclockwise(right_);
         rotate_clockwise(left_);
+
+        commands_sequence.emplace_back("_X_");
     }
     if (rot == "Xi") {
         // Rotate the entire cube by X axis: DOWN plane -> FRONT plane
@@ -278,6 +301,7 @@ void Cube::rotate_cube(const std::string &rot) {
 
         rotate_clockwise(right_);
         rotate_counterclockwise(left_);
+        commands_sequence.emplace_back("_Xi_");
     }
     if (rot == "Z") {
         // Rotate the entire cube by Z axis: LEFT plane -> UP plane
@@ -293,6 +317,8 @@ void Cube::rotate_cube(const std::string &rot) {
 
         rotate_clockwise(front_);
         rotate_counterclockwise(back_);
+
+        commands_sequence.emplace_back("_Z_");
     }
     if (rot == "Zi") {
         // Rotate the entire cube by Zi axis: RIGHT plane -> UP plane
@@ -308,6 +334,7 @@ void Cube::rotate_cube(const std::string &rot) {
 
         rotate_counterclockwise(front_);
         rotate_clockwise(back_);
+        commands_sequence.emplace_back("_Zi_");
     }
 }
 

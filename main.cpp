@@ -3,19 +3,17 @@
 #include "solver/Solver.h"
 
 int main() {
-    Cube cube = Cube().read_file("/Users/maksim/CLionProjects/RubiksCube/test_input.txt");
-//    Cube cube = Cube().generate_random();
+//    Cube cube = Cube().read_file("/Users/maksim/CLionProjects/RubiksCube/test_input.txt");
+    Cube cube = Cube().generate_random(1000);
 
-//    cube.print();
+    cube.print();
 
     Solver solver;
-//    solver.first_layer(cube);
-    cube.rotate_cube("Z");
-    cube.print();
+//    cube.print();
     std::cout << "----------------\n";
-
+//
     solver.first_layer(cube);
-
+//
     cube.print();
 
 //    std::string rot;

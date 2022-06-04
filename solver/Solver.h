@@ -3,6 +3,7 @@
 
 
 #include "../cube/Cube.h"
+#include <vector>
 
 class Solver : public Cube {
 private:

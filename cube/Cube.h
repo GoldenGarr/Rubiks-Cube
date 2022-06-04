@@ -5,9 +5,13 @@
 #include <iostream>
 #include "Plane.h"
 #include <string>
+#include <vector>
 
 class Cube {
+private:
 public:
+    std::vector<std::string> commands_sequence;
+
     // Made these fields public to gain easier access from Solver class
     Plane front_;
     Plane back_;
