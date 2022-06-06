@@ -360,10 +360,6 @@ void Cube::print() {
     std::cout << down_;
 }
 
-// I HATE N
-void Cube::gen_algo_solve(int population_size) {
-
-}
 
 //Getters and setters
 const Plane &Cube::getFront() const {

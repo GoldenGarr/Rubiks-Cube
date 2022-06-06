@@ -51,11 +51,7 @@ public:
 
     void rotate_cube(const std::string &rot);
 
-    void gen_algo_solve(int population_size = 4000);
-
     void print();
-
-    std::string solve();
 
     const Plane &getFront() const;
 

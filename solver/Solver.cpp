@@ -3,8 +3,8 @@
 
 Solver::Solver() = default;
 
-// Layer one solver
-void Solver::first_layer(Cube &cube) {
+// White cross solver
+void Solver::white_cross(Cube &cube) {
 
     //STEP 1: CREATE A WHITE CROSS
     // Place the face with white center on the UP
@@ -113,6 +113,7 @@ void Solver::first_layer(Cube &cube) {
 }
 
 
+// Utility to form a DAISY
 void Solver::plane_setup(Cube &cube, const std::string &plane, const std::string &color, const int &cross_index,
                          const int &vacant_index) {
     // Setup to work with a LEFT plane
@@ -170,37 +171,191 @@ void Solver::move_cell_to_cross(Cube &cube, const std::string &plane, const std:
     for (int j = 0; j < vacant_index; ++j)
         cube.rotate("U");
     cube.rotate("F");
-
-//    if (plane == "left") {
-//        for (int i = 0; i < 4; ++i) {
-//            if (cube.upper_[cross_cells[i][0]][cross_cells[i][1]] != color) {
-//                for (int j = 0; j < i; ++j)
-//                    cube.rotate("U");
-//
-//                cube.rotate("F");
-//                break;
-//            }
-//        }
-//    }
-//    if (plane == "right") {
-//        cube.rotate_cube("Yi");
-//        cube.rotate_cube("Yi");
-//        move_cell_to_cross(cube, "left", color);
-//    }
-//    if (plane == "back") {
-//        cube.rotate_cube("Y");
-//        move_cell_to_cross(cube, "left", color);
-//    }
-//    if (plane == "front") {
-//        cube.rotate_cube("Zi");
-//        move_cell_to_cross(cube, "left", color);
-//    }
 }
 
 
-void Solver::pif_paf() {
-    rotate_cube("R");
-    rotate_cube("U");
-    rotate_cube("Ri");
-    rotate_cube("Ui");
+// Solve the white plane + lower layer
+void Solver::first_layer(Cube &cube) {
+    while (lower_unfinished(cube) > 0) {
+        for (int i = 0; i < 4; ++i) {
+            if (cube.left_[corners_indexes[i][0]][corners_indexes[i][1]] == "w") {
+
+                /*
+                 *      - - -
+                 *      - - -
+                 *      - - X
+                 * */
+                if (i == 0) {
+                    std::string color_1 = cube.down_[0][0];
+                    std::string color_2 = cube.front_[2][0];
+
+                    while (!((cube.front_[1][1] == color_2 && cube.left_[1][1] == color_1)
+                             || (cube.front_[1][1] == color_1 && cube.left_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("Di");
+                    }
+
+                    cube.rotate("Y");
+                    while (cube.down_[0][2] != "w")
+                        pif_paf(cube);
+                }
+
+                /*
+                 *      - - X
+                 *      - - -
+                 *      - - -
+                 * */
+                if (i == 1) {
+                    std::string color_1 = cube.front_[0][0];
+                    std::string color_2 = cube.upper_[2][0];
+
+                    while (!((cube.front_[1][1] == color_2 && cube.left_[1][1] == color_1)
+                             || (cube.front_[1][1] == color_1 && cube.left_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("U");
+                    }
+
+                    cube.rotate("Y");
+                    while (cube.down_[0][2] != "w")
+                        pif_paf(cube);
+                }
+
+                /*
+                 *      X - -
+                 *      - - -
+                 *      - - -
+                 * */
+                if (i == 2) {
+                    std::string color_1 = cube.upper_[0][0];
+                    std::string color_2 = cube.back_[0][2];
+
+                    while (!((cube.back_[1][1] == color_2 && cube.left_[1][1] == color_1)
+                             || (cube.back_[1][1] == color_1 && cube.left_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("U");
+                    }
+
+                    cube.rotate("Y");
+                    cube.rotate("Y");
+                    while (cube.down_[0][2] != "w")
+                        pif_paf(cube);
+                }
+
+                /*
+                 *      - - -
+                 *      - - -
+                 *      X - -
+                 * */
+                if (i == 3) {
+                    std::string color_1 = cube.back_[2][2];
+                    std::string color_2 = cube.down_[2][0];
+
+                    while (!((cube.back_[1][1] == color_2 && cube.left_[1][1] == color_1)
+                             || (cube.back_[1][1] == color_1 && cube.left_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("Di");
+                    }
+
+                    cube.rotate("Y");
+                    cube.rotate("Y");
+                    while (cube.down_[0][0] != "w")
+                        pif_paf(cube);
+                }
+            }
+        }
+        cube.rotate("Y");
+
+        for (int i = 0; i < 4; ++i) {
+            if (cube.upper_[corners_indexes[i][0]][corners_indexes[i][1]] == "w") {
+                if (i == 0) {
+                    std::string color_1 = cube.right_[0][0];
+                    std::string color_2 = cube.front_[0][2];
+
+                    while (!((cube.right_[1][1] == color_2 && cube.front_[1][1] == color_1)
+                             || (cube.right_[1][1] == color_1 && cube.front_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("U");
+                    }
+                    while (cube.down_[0][0] != "w")
+                        pif_paf(cube);
+                }
+
+                if (i == 1) {
+                    std::string color_1 = cube.right_[0][2];
+                    std::string color_2 = cube.back_[0][0];
+
+
+                    while (!((cube.right_[1][1] == color_2 && cube.back_[1][1] == color_1)
+                             || (cube.right_[1][1] == color_1 && cube.back_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("U");
+                    }
+
+                    cube.rotate_cube("Yi");
+                    while (cube.down_[0][0] != "w")
+                        pif_paf(cube);
+                }
+
+                if (i == 2) {
+                    std::string color_1 = cube.back_[0][2];
+                    std::string color_2 = cube.left_[0][0];
+
+
+                    while (!((cube.left_[1][1] == color_2 && cube.back_[1][1] == color_1)
+                             || (cube.left_[1][1] == color_1 && cube.back_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("U");
+                    }
+
+                    cube.rotate_cube("Yi");
+                    cube.rotate_cube("Yi");
+                    while (cube.down_[0][0] != "w")
+                        pif_paf(cube);
+                }
+
+                if (i == 3) {
+                    std::string color_1 = cube.left_[0][2];
+                    std::string color_2 = cube.front_[0][0];
+
+
+                    while (!((cube.left_[1][1] == color_2 && cube.front_[1][1] == color_1)
+                             || (cube.left_[1][1] == color_1 && cube.front_[1][1] == color_2))) {
+                        cube.rotate_cube("Y");
+                        cube.rotate("U");
+                    }
+
+                    cube.rotate_cube("Y");
+                    while (cube.down_[0][0] != "w")
+                        pif_paf(cube);
+                }
+            }
+        }
+
+
+    }
+}
+
+// Find corners of chosen color
+//void Solver::search_corners(Cube &cube, const std::string &color) {
+//
+//}
+
+// Is the DOWN plaene unfinished
+int Solver::lower_unfinished(Cube &cube) {
+    int cells_left = 0;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (cube.down_[i][j] != "w")
+                ++cells_left;
+        }
+    }
+    return cells_left;
+}
+
+
+void Solver::pif_paf(Cube &cube) {
+    cube.rotate_cube("R");
+    cube.rotate_cube("U");
+    cube.rotate_cube("Ri");
+    cube.rotate_cube("Ui");
 }
