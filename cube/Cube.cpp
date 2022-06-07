@@ -3,6 +3,31 @@
 #include <fstream>
 #include <stdlib.h>
 #include <utility>
+#include <random>
+
+
+
+//Cube::Cube(Cube &other) {
+//    // TODO: check if == this
+//    this->front_ = Plane();
+//    this->back_ = Plane();
+//    this->left_ = Plane();
+//    this->right_ = Plane();
+//    this->upper_ = Plane();
+//    this->down_ = Plane();
+//
+//    for (int i = 0; i < 3; ++i) {
+//        for (int j = 0; j < 3; ++j) {
+//            this->front_[i][j] = other.front_[i][j];
+//            this->back_[i][j] = other.back_[i][j];
+//            this->left_[i][j] = other.left_[i][j];
+//            this->right_[i][j] = other.right_[i][j];
+//            this->upper_[i][j] = other.upper_[i][j];
+//            this->down_[i][j] = other.down_[i][j];
+//        }
+//    }
+//}
+
 
 Cube::Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
            Plane lower) : front_(std::move(front)), back_(std::move(back)), left_(std::move(left)) \
@@ -53,9 +78,14 @@ void Cube::assign_cells(Plane &plane, std::ifstream &is) {
 Cube Cube::generate_random(int n_complexity) {
     std::string rotations[12] = {"U", "Ui", "D", "Di", "R", "Ri",
                                  "L", "Li", "F", "Fi", "B", "Bi"};
-    Cube cube = Cube();
+    Cube cube;
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,11); // distribution in range [1, 6]
+
     for (int i = 0; i < n_complexity; ++i)
-        cube.rotate(rotations[rand() % 12]);
+        cube.rotate(rotations[dist(rng)]);
 
     return cube;
 }
@@ -199,6 +229,24 @@ void Cube::rotate(const std::string &rot) {
         commands_sequence.emplace_back("Bi");
     }
 }
+
+void Cube::rotate(const std::vector<std::string> &rotations) {
+    for (auto &rot: rotations)
+        rotate(rot);
+}
+
+void Cube::random_rotation(int n) {
+    std::string rotations[12] = {"U", "Ui", "D", "Di", "R", "Ri",
+                                 "L", "Li", "F", "Fi", "B", "Bi"};
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,11); // distribution in range [1, 6]
+
+    for (int i = 0; i < n; ++i)
+        rotate(rotations[dist(rng)]);
+}
+
 
 // Swap chosen planes' rows
 void Cube::swap_rows(Plane &a, Plane &b, int row_number_a, int row_number_b) {

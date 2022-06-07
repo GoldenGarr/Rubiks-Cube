@@ -22,6 +22,8 @@ public:
 public:
     Cube();
 
+//    Cube(Cube &other);
+
     Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
          Plane lower);
 
@@ -37,6 +39,8 @@ public:
 
     void rotate(const std::string &rot);
 
+    void rotate(const std::vector<std::string>& rotations);
+
     void swap_rows(Plane &a, Plane &b, int row_number_a, int row_number_b);
 
     void swap_columns(Plane &a, Plane &b, int column_number_a, int column_number_b);
@@ -50,6 +54,8 @@ public:
     void rotate_counterclockwise(Plane &plane);
 
     void rotate_cube(const std::string &rot);
+
+    void random_rotation(int n=1);
 
     void print();
 
