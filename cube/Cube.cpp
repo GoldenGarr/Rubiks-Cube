@@ -228,6 +228,12 @@ void Cube::rotate(const std::string &rot) {
         rotate_counterclockwise(back_);
         commands_sequence.emplace_back("Bi");
     }
+
+    if (rot == "M") {
+        rotate_cube("X");
+        rotate("R");
+        rotate("Li");
+    }
 }
 
 void Cube::rotate(const std::vector<std::string> &rotations) {

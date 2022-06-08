@@ -8,13 +8,18 @@ public:
     Cube &cube;
     std::vector<std::vector<std::string>> rotations;
 
+
     Genalgo(Cube &cube);
 
-    void init(int population_size=500);
+    void init(int population_size = 500, int elitism_num = 50,
+              int max_generations = 300,
+              int max_resets = 10);
 
-    int get_fitness();
+    bool fitness_compare(Cube &a, Cube &b);
 
-    int get_fitness(const std::string &plane);
+    int get_fitness(Cube &cube_);
+
+    int get_fitness(Cube &cube_, const std::string &plane);
 };
 
 

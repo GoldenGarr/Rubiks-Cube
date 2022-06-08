@@ -15,6 +15,7 @@ int main() {
 //    g.cube.rotate(g.rotations[1]);
     g.cube.random_rotation(10);
     g.cube.print();
+    g.init();
 
 //    std::cout << g.get_fitness();
 
