@@ -6,6 +6,18 @@
 #include <random>
 
 
+Cube& Cube::operator=(const Cube& other) {
+    if (this != &other) {
+        this->front_ = other.front_;
+        this->back_ = other.back_;
+        this->left_ = other.left_;
+        this->right_ = other.right_;
+        this->down_ = other.down_;
+        this->upper_ = other.upper_;
+    }
+
+    return *this;
+}
 
 //Cube::Cube(Cube &other) {
 //    // TODO: check if == this
@@ -234,6 +246,36 @@ void Cube::rotate(const std::string &rot) {
         rotate("R");
         rotate("Li");
     }
+
+    if (rot == "L2") {
+        rotate("L");
+        rotate("L");
+    }
+
+    if (rot == "F2") {
+        rotate("F");
+        rotate("F");
+    }
+
+    if (rot == "R2") {
+        rotate("R");
+        rotate("R");
+    }
+
+    if (rot == "U2") {
+        rotate("U");
+        rotate("U");
+    }
+
+    if (rot == "B2") {
+        rotate("B");
+        rotate("B");
+    }
+
+    if (rot == "D2") {
+        rotate("D");
+        rotate("D");
+    }
 }
 
 void Cube::rotate(const std::vector<std::string> &rotations) {
@@ -241,16 +283,38 @@ void Cube::rotate(const std::vector<std::string> &rotations) {
         rotate(rot);
 }
 
-void Cube::random_rotation(int n) {
-    std::string rotations[12] = {"U", "Ui", "D", "Di", "R", "Ri",
-                                 "L", "Li", "F", "Fi", "B", "Bi"};
+void Cube::random_single_move(int n) {
+    std::string rotations[18] = {"U", "Ui", "D", "Di", "R", "Ri",
+                                 "L", "Li", "F", "Fi", "B", "Bi", "L2", "R2", "F2", "B2", "U2", "D2"};
 
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0,11); // distribution in range [1, 6]
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,17);
 
     for (int i = 0; i < n; ++i)
         rotate(rotations[dist(rng)]);
+}
+
+void Cube::random_rotation(int n) {
+    std::string rotations[6] = {"X", "Xi", "X2", "Y", "Yi", "Y2"};
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,5);
+
+    for (int i = 0; i < n; ++i)
+        rotate_cube(rotations[dist(rng)]);
+}
+
+void Cube::random_orientation(int n) {
+    std::string rotations[6] = {"Z", "Zi", "Z2"};
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,2);
+
+    for (int i = 0; i < n; ++i)
+        rotate_cube(rotations[dist(rng)]);
 }
 
 
@@ -390,6 +454,21 @@ void Cube::rotate_cube(const std::string &rot) {
         rotate_clockwise(back_);
         commands_sequence.emplace_back("_Zi_");
     }
+
+    if (rot == "X2") {
+        rotate_cube("X");
+        rotate_cube("X");
+    }
+
+    if (rot == "Y2") {
+        rotate_cube("Y");
+        rotate_cube("Y");
+    }
+
+    if (rot == "Z2") {
+        rotate_cube("Z");
+        rotate_cube("Z");
+    }
 }
 
 
@@ -463,3 +542,5 @@ const Plane &Cube::getLower() const {
 void Cube::setLower(const Plane &lower) {
     down_ = lower;
 }
+
+

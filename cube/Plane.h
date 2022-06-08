@@ -13,6 +13,8 @@ public:
 
     Plane();
 
+    Plane& operator=(const Plane& other);
+
     friend std::ostream& operator<<(std::ostream& os, const Plane& plane);
 
     std::string *operator[](int index);

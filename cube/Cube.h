@@ -27,25 +27,27 @@ public:
     Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
          Plane lower);
 
+    Cube& operator=(const Cube& other);
+
     bool validity_check();
 
     Cube read_file(const char *path);
 
-    void to_txt(const std::string& name);
+    void to_txt(const std::string &name);
 
     void assign_cells(Plane &plane, std::ifstream &is);
 
-    Cube generate_random(int n_complexity=20);
+    Cube generate_random(int n_complexity = 20);
 
     void rotate(const std::string &rot);
 
-    void rotate(const std::vector<std::string>& rotations);
+    void rotate(const std::vector<std::string> &rotations);
 
     void swap_rows(Plane &a, Plane &b, int row_number_a, int row_number_b);
 
     void swap_columns(Plane &a, Plane &b, int column_number_a, int column_number_b);
 
-    void swap_row_column(Plane& row_plane, Plane& column_plane, int row_number, int column_number);
+    void swap_row_column(Plane &row_plane, Plane &column_plane, int row_number, int column_number);
 
     void swap_planes(Plane &a, Plane &b);
 
@@ -55,7 +57,11 @@ public:
 
     void rotate_cube(const std::string &rot);
 
-    void random_rotation(int n=1);
+    void random_single_move(int n = 1);
+
+    void random_rotation(int n = 1);
+
+    void random_orientation(int n = 1);
 
     void print();
 

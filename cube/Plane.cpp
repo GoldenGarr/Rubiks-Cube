@@ -20,6 +20,18 @@ Plane::Plane(std::string color) {
 //    }
 }
 
+Plane& Plane::operator=(const Plane& other) {
+    if (this != &other) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                this->cells_[i][j] = other.cells_[i][j];
+            }
+        }
+    }
+    return *this;
+}
+
+
 std::string *Plane::operator[](int index) {
     return cells_[index];
 }

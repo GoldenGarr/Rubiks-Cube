@@ -1,4 +1,5 @@
 #include "Genalgo.h"
+#include <random>
 
 Genalgo::Genalgo(Cube &cube) : cube(cube) {
     rotations = {
@@ -31,30 +32,84 @@ void Genalgo::init(int population_size, int elitism_num,
         for (int i = 0; i < population_size; ++i) {
             Cube c(cube);
             c.rotate(initial_shuffle);
-            c.random_rotation(2);
+            c.random_single_move(2);
             cubes.push_back(c);
         }
 
         for (int gen = 0; gen < max_generations; ++gen) {
             // Order cubes by fitness rate
-            std::sort(cubes.begin(), cubes.end(), [this] (Cube &a, Cube &b) {
+            std::sort(cubes.begin(), cubes.end(), [this](Cube &a, Cube &b) {
                 return get_fitness(a) < get_fitness(b);
             });
 
-            //
+
+            // Init randomizer
+            std::random_device dev;
+            std::mt19937 rng(dev());
+            std::uniform_int_distribution<std::mt19937::result_type> cube_picker(0, elitism_num);
+            std::uniform_int_distribution<std::mt19937::result_type> evolution_picker(0, 5);
+
+            std::cout << gen << ") "<< get_fitness(cubes[0]) << "\n";
+
+            // Elitism filter + fitness function minimization
+            for (int i = 0; i < cubes.size(); ++i) {
+                if (get_fitness(cubes[i]) == 0) {
+                    // TODO print sequence
+                    std::cout << "Solution found \n";
+                    return;
+                }
+
+                // The elitists go without any changes
+                if (i > elitism_num) {
+                    cubes[i] = cubes[cube_picker(rng)];
+
+                    // Evolution path
+                    int evolution_type = evolution_picker(rng);
+
+                    if (evolution_type == 0) {
+                        random_permutations(cubes[i]);
+                    }
+                    if (evolution_type == 1) {
+                        random_permutations(cubes[i], 2);
+                    }
+                    if (evolution_type == 2) {
+                        cubes[i].random_rotation();
+                        random_permutations(cubes[i]);
+                    }
+                    if (evolution_type == 3) {
+                        cubes[i].random_orientation();
+                        random_permutations(cubes[i]);
+                    }
+                    if (evolution_type == 4) {
+                        cubes[i].random_rotation();
+                        cubes[i].random_orientation();
+                        random_permutations(cubes[i]);
+                    }
+                    if (evolution_type == 5) {
+                        cubes[i].random_orientation();
+                        cubes[i].random_rotation();
+                        random_permutations(cubes[i]);
+                    }
+                }
+            }
 
         }
 //        for (auto & cube : cubes) {
 //            std::cout << get_fitness(cube) << " ";
 //        }
     }
-
-
 }
 
-//bool Genalgo::fitness_compare(Cube &a, Cube &b) {
-//    return get_fitness(a) < get_fitness(b);
-//}
+void Genalgo::random_permutations(Cube &cube_, int n) {
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> cube_picker(0, 14);
+
+    for (int i = 0; i < n; ++i) {
+        cube_.rotate(rotations[i]);
+    }
+
+}
 
 int Genalgo::get_fitness(Cube &cube_) {
     int counter = get_fitness(cube_, "front") + get_fitness(cube_, "back")
