@@ -246,6 +246,10 @@ void Cube::rotate(const std::string &rot) {
         rotate("R");
         rotate("Li");
     }
+    if (rot == "M") {
+        rotate("M2");
+        rotate("M2");
+    }
 
     if (rot == "L2") {
         rotate("L");

@@ -30,8 +30,7 @@ void Genalgo::init(int population_size, int elitism_num,
         // Randomized population init
         std::vector<Cube> cubes;
         for (int i = 0; i < population_size; ++i) {
-            Cube c(cube);
-            c.rotate(initial_shuffle);
+            Cube c = cube;
             c.random_single_move(2);
             cubes.push_back(c);
         }
@@ -49,13 +48,16 @@ void Genalgo::init(int population_size, int elitism_num,
             std::uniform_int_distribution<std::mt19937::result_type> cube_picker(0, elitism_num);
             std::uniform_int_distribution<std::mt19937::result_type> evolution_picker(0, 5);
 
-            std::cout << gen << ") "<< get_fitness(cubes[0]) << "\n";
+            if (gen % 20 == 0)
+                std::cout << gen << ") "<< get_fitness(cubes[0]) << "\n";
 
             // Elitism filter + fitness function minimization
             for (int i = 0; i < cubes.size(); ++i) {
                 if (get_fitness(cubes[i]) == 0) {
-                    // TODO print sequence
-                    std::cout << "Solution found \n";
+                    std::cout << "Solution found: \n";
+                    for (auto &rotation : cubes[i].commands_sequence) {
+                        std::cout << rotation;
+                    }
                     return;
                 }
 
@@ -98,6 +100,7 @@ void Genalgo::init(int population_size, int elitism_num,
 //            std::cout << get_fitness(cube) << " ";
 //        }
     }
+    std::cout << "GG\n";
 }
 
 void Genalgo::random_permutations(Cube &cube_, int n) {
@@ -106,7 +109,7 @@ void Genalgo::random_permutations(Cube &cube_, int n) {
     std::uniform_int_distribution<std::mt19937::result_type> cube_picker(0, 14);
 
     for (int i = 0; i < n; ++i) {
-        cube_.rotate(rotations[i]);
+        cube_.rotate(rotations[cube_picker(dev)]);
     }
 
 }
