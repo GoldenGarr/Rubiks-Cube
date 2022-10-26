@@ -22,7 +22,6 @@ public:
 public:
     Cube();
 
-//    Cube(Cube &other);
 
     Cube(Plane front, Plane back, Plane left, Plane right, Plane upper,
          Plane lower);

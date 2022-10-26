@@ -15,9 +15,6 @@ Plane::Plane(std::string color) {
     for (auto &cell: cells_)
         for (auto &c: cell)
             c = color;
-//    for (int i = 0; i < ; ++i) {
-//
-//    }
 }
 
 Plane& Plane::operator=(const Plane& other) {

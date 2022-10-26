@@ -6,7 +6,7 @@
 #include <random>
 
 
-Cube& Cube::operator=(const Cube& other) {
+Cube &Cube::operator=(const Cube &other) {
     if (this != &other) {
         this->front_ = other.front_;
         this->back_ = other.back_;
@@ -54,6 +54,10 @@ Cube::Cube() {
     down_ = Plane("y");
 }
 
+bool Cube::validity_check() {
+
+}
+
 // Required sequence: Front -> Back -> Left -> Right -> Upper -> Down
 Cube Cube::read_file(const char *path) {
     Cube cube;
@@ -94,7 +98,7 @@ Cube Cube::generate_random(int n_complexity) {
 
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0,11); // distribution in range [1, 6]
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, 11); // distribution in range [1, 6]
 
     for (int i = 0; i < n_complexity; ++i)
         cube.rotate(rotations[dist(rng)]);
@@ -293,7 +297,7 @@ void Cube::random_single_move(int n) {
 
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0,17);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, 17);
 
     for (int i = 0; i < n; ++i)
         rotate(rotations[dist(rng)]);
@@ -304,7 +308,7 @@ void Cube::random_rotation(int n) {
 
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0,5);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, 5);
 
     for (int i = 0; i < n; ++i)
         rotate_cube(rotations[dist(rng)]);
@@ -315,7 +319,7 @@ void Cube::random_orientation(int n) {
 
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0,2);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, 2);
 
     for (int i = 0; i < n; ++i)
         rotate_cube(rotations[dist(rng)]);
